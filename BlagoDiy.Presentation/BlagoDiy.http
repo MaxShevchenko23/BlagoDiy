@@ -1,0 +1,6 @@
+@BlagoDiy_HostAddress = http://localhost:5211
+
+GET {{BlagoDiy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
