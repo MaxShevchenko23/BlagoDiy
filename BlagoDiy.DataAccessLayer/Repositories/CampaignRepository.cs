@@ -22,6 +22,15 @@ public class CampaignRepository : Repository<Campaign>
         return await context.Campaigns.ToListAsync();
     }
     
+    public async Task<IEnumerable<Campaign>> GetAllPaginatedAsync(int page, int pageSize)
+    {
+        return await context
+            .Campaigns
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+    
     public override async Task AddAsync(Campaign entity)
     {
         await context.Campaigns.AddAsync(entity);

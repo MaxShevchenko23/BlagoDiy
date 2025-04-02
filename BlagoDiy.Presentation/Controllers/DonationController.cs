@@ -16,9 +16,9 @@ public class DonationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllDonations()
+    public async Task<IActionResult> GetAllDonations(int page = 1, int pageSize = 10)
     {
-        var donations = await donationService.GetAllDonationsAsync();
+        var donations = await donationService.GetAllDonationsAsync(page, pageSize);
         return Ok(donations);
     }
 
@@ -71,5 +71,12 @@ public class DonationController : ControllerBase
         
         await donationService.DeleteDonationAsync(id);
         return NoContent();
+    }
+    
+    [HttpGet("campaign/{campaignId}")]
+    public async Task<IActionResult> GetDonationsByCampaignId(int campaignId, int? take)
+    {
+        var donations = await donationService.GetDonationsByCampaignIdAsync(campaignId, take);
+        return Ok(donations);
     }
 }

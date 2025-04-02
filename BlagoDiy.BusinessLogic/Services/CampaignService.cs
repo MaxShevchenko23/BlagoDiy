@@ -17,9 +17,9 @@ public class CampaignService
            campaignRepository = unitOfWork.CampaignRepository;
        }
    
-       public async Task<IEnumerable<Campaign>> GetAllCampaigns()
+       public async Task<IEnumerable<Campaign>> GetAllCampaigns(int page, int pageSize)
        {
-           return await campaignRepository.GetAllAsync();
+           return await campaignRepository.GetAllPaginatedAsync(page, pageSize);
        }
    
        public async Task<Campaign> GetCampaignById(int id)

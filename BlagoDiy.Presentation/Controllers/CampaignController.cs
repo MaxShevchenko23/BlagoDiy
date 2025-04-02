@@ -16,9 +16,9 @@ public class CampaignController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllCampaigns()
+    public async Task<IActionResult> GetAllCampaigns(int page = 1, int pageSize = 10)
     {
-        var campaigns = await campaignService.GetAllCampaigns();
+        var campaigns = await campaignService.GetAllCampaigns(page, pageSize);
         return Ok(campaigns);
     }
     

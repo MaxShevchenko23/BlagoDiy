@@ -22,9 +22,20 @@ public class DonationRepository : Repository<Donation>
         return await context.Donations.ToListAsync();
     }
 
+    public async Task<IEnumerable<Donation>> GetAllAsync(int page, int pageSize)
+    {
+        return await context.Donations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+    }
+    
     public override async Task AddAsync(Donation entity)
     {
+        
+        var campaign = await context.Campaigns.FindAsync(entity.CampaignId);
+        campaign.Raised+=entity.Amount;
+        
         await context.Donations.AddAsync(entity);
+        context.Campaigns.Update(campaign);
+        
         await context.SaveChangesAsync();
     }
 
@@ -42,5 +53,19 @@ public class DonationRepository : Repository<Donation>
             context.Donations.Remove(entity);
             await context.SaveChangesAsync();
         }
+    }
+    
+    public async Task<IEnumerable<Donation>> GetDonationsByCampaignIdAsync(int campaignId, int? take)
+    {
+        var donations = context
+            .Donations
+            .Where(d => d.CampaignId == campaignId);
+        
+        if (take.HasValue)
+        {
+            donations = donations.Take(take.Value);
+        }
+        
+        return await donations.ToListAsync();
     }
 }

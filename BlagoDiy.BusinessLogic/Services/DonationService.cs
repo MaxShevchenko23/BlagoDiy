@@ -17,9 +17,9 @@ public class DonationService
         donationRepository = unitOfWork.DonationRepository;
     }
 
-    public async Task<IEnumerable<Donation>> GetAllDonationsAsync()
+    public async Task<IEnumerable<Donation>> GetAllDonationsAsync(int page, int pageSize)
     {
-        return await donationRepository.GetAllAsync();
+        return await donationRepository.GetAllAsync(page, pageSize);
     }
 
     public async Task<Donation> GetDonationByIdAsync(int id)
@@ -46,5 +46,10 @@ public class DonationService
         {
             await donationRepository.DeleteAsync(id);
         }
+    }
+    
+    public async Task<IEnumerable<Donation>> GetDonationsByCampaignIdAsync(int campaignId, int? take)
+    {
+        return await donationRepository.GetDonationsByCampaignIdAsync(campaignId, take);
     }
 }
