@@ -16,7 +16,9 @@ public class MapperProfile : Profile
         
         CreateMap<Donation,DonationPost>().ReverseMap();
         CreateMap<Donation,DonationGet>().ReverseMap();
-        
+
+        CreateMap<User, UserGetDto>().ReverseMap();
+        CreateMap<User, UserPost>().ReverseMap();
         
     }
 }

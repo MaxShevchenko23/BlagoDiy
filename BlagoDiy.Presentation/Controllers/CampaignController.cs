@@ -51,24 +51,43 @@ public class CampaignController : ControllerBase
         {
             return BadRequest(ModelState);
         }
+
         var campaign = await campaignService.GetCampaignById(id);
+            
         if (campaign == null)
         {
             return NotFound();
         }
+
+        var userId = JwtHelper.DecodeToken(HttpContext.Request.Headers["Authorization"].ToString())?.Id;
+
+        if (userId.HasValue && userId.Value != campaign.CreatorId)
+        {
+            return BadRequest("Only the creator can update the campaign.");
+        }
+        
+        
         await campaignService.UpdateCampaignAsync(campaignDto);
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCampaign(int id)
+    [HttpPost("close/{id}")]
+    public async Task<IActionResult> CloseCampaign(int id)
     {
         var campaign = await campaignService.GetCampaignById(id);
         if (campaign == null)
         {
             return NotFound();
         }
-        await campaignService.DeleteCampaignAsync(id);
-        return NoContent();
+        
+        var userId = JwtHelper.DecodeToken(HttpContext.Request.Headers["Authorization"].ToString())?.Id;
+        
+        if (userId.HasValue && userId.Value == campaign.CreatorId)
+        {
+            await campaignService.CloseCampaignAsync(id);
+            return NoContent();
+        }
+        
+        return BadRequest("Only the creator can close the campaign.");
     }
 }

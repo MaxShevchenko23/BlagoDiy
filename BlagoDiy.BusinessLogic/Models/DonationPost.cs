@@ -16,4 +16,6 @@ public class DonationPost
     
     
     public int CampaignId { get; set; }
+    public int? UserId { get; set; }
+
 }

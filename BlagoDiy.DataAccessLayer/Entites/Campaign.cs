@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlagoDiy.DataAccessLayer.Entites;
 
@@ -28,5 +29,10 @@ public class Campaign : IEntity
     public string SocialUrls { get; set; }
     
     public IList<Donation> Donations { get; set; }
+
+    
+    [ForeignKey("CreatorId")]
+    public int CreatorId { get; set; }
+    public User User { get; set; }
 }
 

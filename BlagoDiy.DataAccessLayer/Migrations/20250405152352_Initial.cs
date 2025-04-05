@@ -12,6 +12,22 @@ namespace BlagoDiy.DataAccessLayer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Campaigns",
                 columns: table => new
                 {
@@ -25,11 +41,19 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
-                    SocialUrls = table.Column<string>(type: "TEXT", nullable: false)
+                    SocialUrls = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Campaigns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Campaigns_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,7 +67,8 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                     Amount = table.Column<decimal>(type: "TEXT", nullable: false),
                     Message = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CampaignId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CampaignId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,12 +79,27 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         principalTable: "Campaigns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Donations_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Campaigns_UserId",
+                table: "Campaigns",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Donations_CampaignId",
                 table: "Donations",
                 column: "CampaignId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Donations_UserId",
+                table: "Donations",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -70,6 +110,9 @@ namespace BlagoDiy.DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Campaigns");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

@@ -6,6 +6,7 @@ public interface IUnitOfWork
 {
     public CampaignRepository CampaignRepository { get; }
     public DonationRepository DonationRepository { get; }
+    public UserRepository UserRepository { get; }
 
     Task<int> SaveChangesAsync();
 }

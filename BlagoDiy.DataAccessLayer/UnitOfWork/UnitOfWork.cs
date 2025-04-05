@@ -15,8 +15,8 @@ public class UnitOfWork : IUnitOfWork
     public CampaignRepository CampaignRepository => new(context);
     
     public DonationRepository DonationRepository => new(context);
+    public UserRepository UserRepository => new(context);
 
-    
     public async Task<int> SaveChangesAsync()
     {
         return await context.SaveChangesAsync();

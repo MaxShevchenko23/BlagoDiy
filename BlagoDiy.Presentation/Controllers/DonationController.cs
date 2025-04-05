@@ -1,6 +1,7 @@
 ﻿using BlagoDiy.BusinessLogic.Models;
 using BlagoDiy.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace BlagoDiy.Controllers;
 
@@ -40,7 +41,17 @@ public class DonationController : ControllerBase
         {
             return BadRequest(ModelState);
         }
+        
+        var userId = JwtHelper.DecodeToken(HttpContext.Request.Headers["Authorization"].ToString())?.Id;
+        
+        if (userId.HasValue)
+        {
+            donationDto.UserId = userId.Value;
+        }
+        
         await donationService.CreateDonationAsync(donationDto);
+        
+        
         return Ok();
     }
 

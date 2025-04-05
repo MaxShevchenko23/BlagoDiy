@@ -38,7 +38,7 @@ public class CampaignService
            var entity = mapper.Map<Campaign>(campaignDto);
            await campaignRepository.UpdateAsync(entity);
        }
-       public async Task DeleteCampaignAsync(int id)
+       public async Task CloseCampaignAsync(int id)
        {
            var campaign = await campaignRepository.GetByIdAsync(id);
            if (campaign != null)

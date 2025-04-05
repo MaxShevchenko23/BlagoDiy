@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlagoDiy.DataAccessLayer.Entites;
 
@@ -14,5 +15,12 @@ public class Donation : IEntity
     public DateTime CreatedAt { get; set; }
     
     public int CampaignId { get; set; }
+    
+    [ForeignKey("CampaignId")]
     public Campaign Campaign { get; set; }
+    
+    public int? UserId { get; set; }
+    
+    [ForeignKey("UserId")]
+    public User? User { get; set; }
 }

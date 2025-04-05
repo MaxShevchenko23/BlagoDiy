@@ -30,6 +30,9 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -56,7 +59,12 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Campaigns");
                 });
@@ -85,11 +93,53 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Donations");
+                });
+
+            modelBuilder.Entity("BlagoDiy.DataAccessLayer.Entites.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BlagoDiy.DataAccessLayer.Entites.Campaign", b =>
+                {
+                    b.HasOne("BlagoDiy.DataAccessLayer.Entites.User", "User")
+                        .WithMany("Campaigns")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BlagoDiy.DataAccessLayer.Entites.Donation", b =>
@@ -100,11 +150,24 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlagoDiy.DataAccessLayer.Entites.User", "User")
+                        .WithMany("Donations")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Campaign");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BlagoDiy.DataAccessLayer.Entites.Campaign", b =>
                 {
+                    b.Navigation("Donations");
+                });
+
+            modelBuilder.Entity("BlagoDiy.DataAccessLayer.Entites.User", b =>
+                {
+                    b.Navigation("Campaigns");
+
                     b.Navigation("Donations");
                 });
 #pragma warning restore 612, 618

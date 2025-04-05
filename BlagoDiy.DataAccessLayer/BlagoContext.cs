@@ -32,6 +32,7 @@ public class BlagoContext : DbContext
     
     public DbSet<Campaign> Campaigns { get; set; }
     public DbSet<Donation> Donations { get; set; }
+    public DbSet<User> Users { get; set; }
     
     
 }
