@@ -27,6 +27,8 @@ public class UserService
         var entity = mapper.Map<User>(userDto);
         await userRepository.AddAsync(entity);
         
+        entity.CreatedAt = DateTime.Now;
+        
         var createdUser = await userRepository.GetUserByEmailAndPasswordAsync(userDto.Email,userDto.Password);
         
         return createdUser;

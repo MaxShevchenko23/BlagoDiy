@@ -30,6 +30,9 @@ public class DonationService
     public async Task CreateDonationAsync(DonationPost donationDto)
     {
         var entity = mapper.Map<Donation>(donationDto);
+        
+        entity.CreatedAt = DateTime.Now;
+        
         await donationRepository.AddAsync(entity);
     }
 

@@ -30,6 +30,9 @@ public class CampaignService
        public async Task CreateCampaignAsync(CampaignPost campaignDto)
        {
            var entity = mapper.Map<Campaign>(campaignDto);
+           
+           entity.CreatedAt = DateTime.Now;
+
            await campaignRepository.AddAsync(entity);
        }
        
