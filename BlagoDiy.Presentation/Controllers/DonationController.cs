@@ -42,11 +42,16 @@ public class DonationController : ControllerBase
             return BadRequest(ModelState);
         }
         
-        var userId = JwtHelper.DecodeToken(HttpContext.Request.Headers["Authorization"].ToString())?.Id;
+        var campaign = await donationService.GetDonationByIdAsync(donationDto.CampaignId);
         
-        if (userId.HasValue)
+        if (campaign == null)
         {
-            donationDto.UserId = userId.Value;
+            return NotFound();
+        }
+        
+        if (campaign.UserId != donationDto.UserId)
+        {
+            return Forbid();
         }
         
         await donationService.CreateDonationAsync(donationDto);

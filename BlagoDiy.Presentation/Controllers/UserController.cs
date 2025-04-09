@@ -37,11 +37,10 @@ public class UserController : ControllerBase
             return BadRequest(ModelState);
         }
         
-        var userGetDto = await userService.CreateUserAsync(userDto);
+        var user = await userService.CreateUserAsync(userDto);
 
-        var token = JwtHelper.GenerateToken(userGetDto);
         
-        return Ok(new { token=token });
+        return Ok(user);
 
     }
     
@@ -60,14 +59,9 @@ public class UserController : ControllerBase
             return Unauthorized();
         }
         
-        var token = JwtHelper.GenerateToken(user);
+        
 
-        if (token == null)
-        {
-            return Unauthorized();
-        }
-
-        return Ok(new { token=token });
+        return Ok(user);
     }
     
     

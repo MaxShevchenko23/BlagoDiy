@@ -45,7 +45,7 @@ public class CampaignController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCampaign(int id, [FromBody] CampaignPost campaignDto)
+    public async Task<IActionResult> UpdateCampaign(int id, [FromBody] CampaignPost campaignDto, int userId)
     {
         if (!ModelState.IsValid)
         {
@@ -59,9 +59,8 @@ public class CampaignController : ControllerBase
             return NotFound();
         }
 
-        var userId = JwtHelper.DecodeToken(HttpContext.Request.Headers["Authorization"].ToString())?.Id;
 
-        if (userId.HasValue && userId.Value != campaign.CreatorId)
+        if (userId != campaign.CreatorId)
         {
             return BadRequest("Only the creator can update the campaign.");
         }
@@ -72,22 +71,21 @@ public class CampaignController : ControllerBase
     }
     
     [HttpPost("close/{id}")]
-    public async Task<IActionResult> CloseCampaign(int id)
+    public async Task<IActionResult> CloseCampaign(int id, int userId)
     {
         var campaign = await campaignService.GetCampaignById(id);
+        
         if (campaign == null)
         {
             return NotFound();
         }
         
-        var userId = JwtHelper.DecodeToken(HttpContext.Request.Headers["Authorization"].ToString())?.Id;
-        
-        if (userId.HasValue && userId.Value == campaign.CreatorId)
+        if (userId != campaign.CreatorId)
         {
-            await campaignService.CloseCampaignAsync(id);
-            return NoContent();
+            return BadRequest("Only the creator can close the campaign.");
         }
         
-        return BadRequest("Only the creator can close the campaign.");
+        await campaignService.CloseCampaignAsync(id);
+        return NoContent(); 
     }
 }
