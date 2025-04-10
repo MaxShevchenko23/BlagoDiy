@@ -35,4 +35,33 @@ public class BlagoContext : DbContext
     public DbSet<User> Users { get; set; }
     
     
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<Campaign>()
+            .Property(c => c.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        
+        modelBuilder.Entity<Campaign>()
+            .HasOne(c => c.User)
+            .WithMany()
+            .HasForeignKey(c => c.CreatorId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Donation>()
+            .Property(d => d.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        
+        modelBuilder.Entity<Donation>()
+            .HasOne(d => d.Campaign)
+            .WithMany(c => c.Donations)
+            .HasForeignKey(d => d.CampaignId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<User>()
+            .Property(u => u.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+    }
+    
 }

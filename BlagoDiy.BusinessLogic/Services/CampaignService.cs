@@ -32,6 +32,7 @@ public class CampaignService
            var entity = mapper.Map<Campaign>(campaignDto);
            
            entity.CreatedAt = DateTime.Now;
+           entity.CreatorId = campaignDto.CreatorId;
 
            await campaignRepository.AddAsync(entity);
        }

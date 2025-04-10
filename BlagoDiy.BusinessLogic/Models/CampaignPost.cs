@@ -24,4 +24,6 @@ public class CampaignPost
     public string ImageUrl { get; set; }
     public string SocialUrls { get; set; }
     
+    public int CreatorId { get; set; }
+    
 }

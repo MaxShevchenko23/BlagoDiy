@@ -3,6 +3,7 @@ using System;
 using BlagoDiy.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlagoDiy.DataAccessLayer.Migrations
 {
     [DbContext(typeof(BlagoContext))]
-    partial class BlagoContextModelSnapshot : ModelSnapshot
+    [Migration("20250410091850_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -28,9 +31,7 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("INTEGER");
@@ -61,12 +62,10 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
 
                     b.HasIndex("UserId");
 
@@ -86,9 +85,7 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
@@ -118,9 +115,7 @@ namespace BlagoDiy.DataAccessLayer.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -142,14 +137,10 @@ namespace BlagoDiy.DataAccessLayer.Migrations
             modelBuilder.Entity("BlagoDiy.DataAccessLayer.Entites.Campaign", b =>
                 {
                     b.HasOne("BlagoDiy.DataAccessLayer.Entites.User", "User")
-                        .WithMany()
-                        .HasForeignKey("CreatorId")
+                        .WithMany("Campaigns")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BlagoDiy.DataAccessLayer.Entites.User", null)
-                        .WithMany("Campaigns")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
