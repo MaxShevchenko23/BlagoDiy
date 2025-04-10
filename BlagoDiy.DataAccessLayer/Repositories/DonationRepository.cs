@@ -55,16 +55,13 @@ public class DonationRepository : Repository<Donation>
         }
     }
     
-    public async Task<IEnumerable<Donation>> GetDonationsByCampaignIdAsync(int campaignId, int? take)
+    public async Task<IEnumerable<Donation>> GetDonationsByCampaignIdAsync(int campaignId, int take = 10)
     {
         var donations = context
             .Donations
-            .Where(d => d.CampaignId == campaignId);
-        
-        if (take.HasValue)
-        {
-            donations = donations.Take(take.Value);
-        }
+            .Where(d => d.CampaignId == campaignId)
+            .Include(e=>e.User)
+            .Take(take);
         
         return await donations.ToListAsync();
     }

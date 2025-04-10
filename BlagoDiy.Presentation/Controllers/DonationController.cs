@@ -90,7 +90,7 @@ public class DonationController : ControllerBase
     }
     
     [HttpGet("campaign/{campaignId}")]
-    public async Task<IActionResult> GetDonationsByCampaignId(int campaignId, int? take)
+    public async Task<IActionResult> GetDonationsByCampaignId(int campaignId, int take = 10)
     {
         var donations = await donationService.GetDonationsByCampaignIdAsync(campaignId, take);
         return Ok(donations);

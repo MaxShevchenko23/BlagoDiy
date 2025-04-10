@@ -51,7 +51,7 @@ public class DonationService
         }
     }
     
-    public async Task<IEnumerable<Donation>> GetDonationsByCampaignIdAsync(int campaignId, int? take)
+    public async Task<IEnumerable<Donation>> GetDonationsByCampaignIdAsync(int campaignId, int take = 10)
     {
         return await donationRepository.GetDonationsByCampaignIdAsync(campaignId, take);
     }
