@@ -12,7 +12,7 @@ public class DonationRepository : Repository<Donation>
        context = _context;
     }
 
-    public override async Task<Donation> GetByIdAsync(int id)
+    public override async Task<Donation?> GetByIdAsync(int id)
     {
         return await context.Donations.FindAsync(id);
     }

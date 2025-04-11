@@ -12,12 +12,12 @@ public class CampaignRepository : Repository<Campaign>
         context = _context;
     }
 
-    public override async Task<Campaign> GetByIdAsync(int id)
+    public override async Task<Campaign?> GetByIdAsync(int id)
     {
         return await context
             .Campaigns
             .Include(e=>e.User)
-            .FirstAsync(e => e.Id == id);
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
     
     public override async Task<IEnumerable<Campaign>> GetAllAsync()

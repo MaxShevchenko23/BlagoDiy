@@ -1,6 +1,7 @@
 using BlagoDiy.BusinessLogic.Services;
 using BlagoDiy.DataAccessLayer;
 using BlagoDiy.DataAccessLayer.UnitOfWork;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +21,11 @@ builder.Services.AddScoped<UserService>();
 
 
 
-builder.Services.AddControllers();
-
-
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+});
 
 
 var app = builder.Build();

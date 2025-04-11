@@ -10,10 +10,12 @@ namespace BlagoDiy.Controllers;
 public class DonationController : ControllerBase
 {
     private readonly DonationService donationService;
+    private readonly CampaignService campaignService;
 
-    public DonationController(DonationService donationService)
+    public DonationController(DonationService donationService, CampaignService campaignService)
     {
         this.donationService = donationService;
+        this.campaignService = campaignService;
     }
 
     [HttpGet]
@@ -42,16 +44,11 @@ public class DonationController : ControllerBase
             return BadRequest(ModelState);
         }
         
-        var campaign = await donationService.GetDonationByIdAsync(donationDto.CampaignId);
+        var campaign = await campaignService.GetCampaignById(donationDto.CampaignId);
         
         if (campaign == null)
         {
             return NotFound();
-        }
-        
-        if (campaign.UserId != donationDto.UserId)
-        {
-            return Forbid();
         }
         
         await donationService.CreateDonationAsync(donationDto);

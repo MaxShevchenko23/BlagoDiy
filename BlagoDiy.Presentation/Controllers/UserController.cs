@@ -1,6 +1,5 @@
 ﻿using BlagoDiy.BusinessLogic.Models;
 using BlagoDiy.BusinessLogic.Services;
-using BlagoDiy.DataAccessLayer.Entites;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlagoDiy.Controllers;
