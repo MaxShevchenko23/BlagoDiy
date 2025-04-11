@@ -19,7 +19,16 @@ builder.Services.AddScoped<CampaignService>();
 builder.Services.AddScoped<DonationService>();
 builder.Services.AddScoped<UserService>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -29,6 +38,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 app.UseRouting();
 
@@ -46,7 +57,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlagoDiy API V1");
     c.RoutePrefix = string.Empty;
 });
-
 
 
 
