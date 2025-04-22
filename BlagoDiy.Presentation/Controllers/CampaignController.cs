@@ -33,6 +33,20 @@ public class CampaignController : ControllerBase
         return Ok(campaign);
     }
     
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetCampaignsByUserId(int userId)
+    {
+        var campaigns = await campaignService.GetCampaignsByUserId(userId);
+        
+        if (campaigns == null || !campaigns.Any())
+        {
+            return NotFound();
+        }
+        
+        return Ok(campaigns);
+    }
+    
+    
     [HttpPost]
     public async Task<IActionResult> CreateCampaign([FromBody] CampaignPost campaignDto)
     {
@@ -66,7 +80,7 @@ public class CampaignController : ControllerBase
         }
         
         
-        await campaignService.UpdateCampaignAsync(campaignDto);
+        await campaignService.UpdateCampaignAsync(campaignDto, id);
         return NoContent();
     }
     

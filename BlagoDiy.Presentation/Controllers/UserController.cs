@@ -71,6 +71,26 @@ public class UserController : ControllerBase
         
         return NoContent();
     }
+    
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UserPost userDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        var user = await userService.GetUserByIdAsync(id);
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+        
+        await userService.UpdateUserAsync(userDto, id);
+        
+        return NoContent();
+    }
 }
 
 public record UserLogin

@@ -40,9 +40,11 @@ public class UserService
         return user;
     }
     
-    public async Task UpdateUserAsync(UserPost userDto)
+    public async Task UpdateUserAsync(UserPost userDto, int userId)
     {
         var entity = mapper.Map<User>(userDto);
+        entity.Id = userId;
+         
         await userRepository.UpdateAsync(entity);
     }
     

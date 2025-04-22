@@ -27,6 +27,11 @@ public class CampaignService
            return await campaignRepository.GetByIdAsync(id);
        }
        
+       public async Task<IEnumerable<Campaign>> GetCampaignsByUserId(int userId)
+       {
+           return await campaignRepository.GetByUserIdAsync(userId);
+       }
+       
        public async Task CreateCampaignAsync(CampaignPost campaignDto)
        {
            var entity = mapper.Map<Campaign>(campaignDto);
@@ -37,11 +42,14 @@ public class CampaignService
            await campaignRepository.AddAsync(entity);
        }
        
-       public async Task UpdateCampaignAsync(CampaignPost campaignDto)
+       public async Task UpdateCampaignAsync(CampaignPost campaignDto, int campaignId)
        {
            var entity = mapper.Map<Campaign>(campaignDto);
+           entity.Id = campaignId;
+           
            await campaignRepository.UpdateAsync(entity);
        }
+       
        public async Task CloseCampaignAsync(int id)
        {
            var campaign = await campaignRepository.GetByIdAsync(id);

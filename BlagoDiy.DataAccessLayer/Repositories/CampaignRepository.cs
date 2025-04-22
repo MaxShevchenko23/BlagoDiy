@@ -16,6 +16,7 @@ public class CampaignRepository : Repository<Campaign>
     {
         return await context
             .Campaigns
+            .AsNoTracking()
             .Include(e=>e.User)
             .FirstOrDefaultAsync(e => e.Id == id);
     }
@@ -54,5 +55,14 @@ public class CampaignRepository : Repository<Campaign>
             context.Campaigns.Remove(entity);
             await context.SaveChangesAsync();
         }
+    }
+
+    public async Task<IEnumerable<Campaign>> GetByUserIdAsync(int userId)
+    {
+        var campaigns = await context.Campaigns.
+            Where(c => c.CreatorId == userId)
+            .ToListAsync();
+        
+        return campaigns;
     }
 }
