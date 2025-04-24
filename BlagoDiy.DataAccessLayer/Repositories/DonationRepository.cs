@@ -37,6 +37,17 @@ public class DonationRepository : Repository<Donation>
         context.Campaigns.Update(campaign);
         
         await context.SaveChangesAsync();
+
+        var achievementRepo = new AchievementRepository(context);
+        
+        await achievementRepo.IncrementAchievementProgress(3, entity.UserId.Value, int.Parse(entity.Amount.ToString()));
+        await achievementRepo.IncrementAchievementProgress(1, entity.UserId.Value, 1);
+
+        if (await CheckIfUserDonatedToCategory(entity.UserId.Value, campaign.Category))
+        {
+            await achievementRepo.IncrementAchievementProgress(2, entity.UserId.Value, 1);
+        }
+
     }
 
     public override async Task UpdateAsync(Donation entity)
@@ -64,5 +75,15 @@ public class DonationRepository : Repository<Donation>
             .Take(take);
         
         return await donations.ToListAsync();
+    }
+    
+    public async Task<bool> CheckIfUserDonatedToCategory(int userId, string categoryId)
+    {
+        var donations = await context.Donations
+            .Include(e=>e.Campaign)
+            .Where(d => d.UserId == userId && d.Campaign.Category == categoryId)
+            .ToListAsync();
+        
+        return donations.Any();
     }
 }

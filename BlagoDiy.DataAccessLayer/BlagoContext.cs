@@ -34,6 +34,10 @@ public class BlagoContext : DbContext
     public DbSet<Donation> Donations { get; set; }
     public DbSet<User> Users { get; set; }
     
+    public DbSet<Achievement> Achievements { get; set; }
+    
+    public DbSet<AchievementToUser> AchievementToUsers { get; set; }
+    
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -62,6 +66,22 @@ public class BlagoContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+
+        modelBuilder.Entity<AchievementToUser>()
+            .HasKey(e => e.Id);
+
+        modelBuilder.Entity<AchievementToUser>()
+            .HasOne(e => e.User)
+            .WithMany(e => e.Achievements)
+            .HasForeignKey(e => e.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AchievementToUser>()
+            .HasOne(e => e.Achievement)
+            .WithMany(e => e.Users)
+            .HasForeignKey(e => e.AchievementId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
     
 }

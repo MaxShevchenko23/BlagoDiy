@@ -39,6 +39,9 @@ public class CampaignRepository : Repository<Campaign>
     {
         await context.Campaigns.AddAsync(entity);
         await context.SaveChangesAsync();
+
+        var achievementsRepo = new AchievementRepository(context);
+        await achievementsRepo.IncrementAchievementProgress(4, entity.CreatorId, 1);
     }
     
     public override async Task UpdateAsync(Campaign entity)

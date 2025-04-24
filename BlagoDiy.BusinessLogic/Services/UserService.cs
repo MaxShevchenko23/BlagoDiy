@@ -56,5 +56,4 @@ public class UserService
             await userRepository.DeleteAsync(id);
         }
     }
-
 }

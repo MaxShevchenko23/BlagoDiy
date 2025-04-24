@@ -18,6 +18,7 @@ builder.Services.AddDbContext<BlagoContext>();
 builder.Services.AddScoped<CampaignService>();
 builder.Services.AddScoped<DonationService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AchievementService>();
 
 builder.Services.AddCors(options =>
 {

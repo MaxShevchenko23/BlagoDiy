@@ -12,6 +12,7 @@ public class User : IEntity
     
     public List<Campaign> Campaigns { get; set; }
     public List<Donation> Donations { get; set; }
+    public List<AchievementToUser> Achievements { get; set; }
     
     public DateTime CreatedAt { get; set; }
 }

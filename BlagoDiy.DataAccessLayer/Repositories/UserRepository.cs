@@ -14,7 +14,7 @@ public class UserRepository: Repository<User>
 
     public override async Task<User> GetByIdAsync(int id)
     {
-        return await context.Users.FindAsync(id);
+        return await context.Users.AsNoTracking().FirstAsync(e => e.Id == id);
     }
 
     public override async Task<IEnumerable<User>> GetAllAsync()
@@ -24,8 +24,17 @@ public class UserRepository: Repository<User>
 
     public override async Task AddAsync(User entity)
     {
-        await context.Users.AddAsync(entity);
+        var created = await context.Users.AddAsync(entity);
         await context.SaveChangesAsync();
+
+        var acheivementsRepo = new AchievementRepository(context);
+
+        var user = await GetUserByEmailAndPasswordAsync(entity.Email, entity.Password);
+        
+        await acheivementsRepo.InitializeAchievementsForUser(user.Id);
+        
+        await context.SaveChangesAsync();
+        
     }
 
     public override async Task UpdateAsync(User entity)
@@ -47,8 +56,11 @@ public class UserRepository: Repository<User>
     
     public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string password)
     {
-        return await context.Users
-            .FirstOrDefaultAsync(u => u.Email == email 
+      var user= context.Users
+            .Where(u => u.Email == email 
                                       && u.Password == password);
+        
+      
+      return await user.FirstOrDefaultAsync();
     }
 }

@@ -20,5 +20,7 @@ public class MapperProfile : Profile
         CreateMap<User, UserGetDto>().ReverseMap();
         CreateMap<User, UserPost>().ReverseMap();
         
+        
+        CreateMap<Achievement, AchievementPost>().ReverseMap();
     }
 }
